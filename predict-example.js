@@ -11,7 +11,7 @@
 
 */
 
-var predict = require("../predict") ;
+var predict = require("../brain-predict") ;
 
 var config = {
 	checkSteps : 16,
