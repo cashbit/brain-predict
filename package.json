@@ -1,10 +1,10 @@
 {
-    "name": "cwpredict",
+    "name": "brain-predict",
     "version": "0.0.1",
-    "description": "A Neural network prediction algorithm",
+    "description": "A Neural network prediction algorithm based on brain node module",
     "dependencies": {
         "brain": "latest"
     },
-    "repository": "https://github.com/cashbit/predict.git",
+    "repository": "https://github.com/cashbit/brain-predict.git",
     "author": "Cashbit"
 }
