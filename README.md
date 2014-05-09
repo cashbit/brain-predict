@@ -17,8 +17,6 @@ How to predict sales per year quarter.
 var predict = require("brain-predict") ;
 
 var config = {
-	// how many steps use to calculate meanerror
-	checkSteps : 16,
 	// how many steps to predict
 	predictionSteps : 8,
 	// how many steps use for each training pattern
