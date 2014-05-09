@@ -1,7 +1,7 @@
 brain-predict
 =============
 
-A Neural network prediction algorithm based on brain node module
+A Neural network prediction algorithm based on (brain)[https://github.com/harthur/brain] node module
 
 ### Install
 
@@ -21,7 +21,7 @@ var config = {
 	checkSteps : 16,
 	// how many steps to predict
 	predictionSteps : 8,
-	// how many steps use for eache pattern
+	// how many steps use for each training pattern
 	step : 4,
 	// input data
 	serie : [
