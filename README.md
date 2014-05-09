@@ -1,7 +1,7 @@
 brain-predict
 =============
 
-A Neural network prediction algorithm based on (brain)[https://github.com/harthur/brain] node module
+A Neural network prediction algorithm based on [brain](https://github.com/harthur/brain) node module
 
 ### Install
 
