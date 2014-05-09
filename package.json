@@ -1,0 +1,10 @@
+{
+    "name": "cwpredict",
+    "version": "0.0.1",
+    "description": "A Neural network prediction algorithm",
+    "dependencies": {
+        "brain": "latest"
+    },
+    "repository": "https://github.com/cashbit/predict.git",
+    "author": "Cashbit"
+}
