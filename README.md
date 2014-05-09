@@ -11,13 +11,19 @@ npm install brain-predict
 
 ### Example
 
+How to predict sales per year quarter.
+
 ```
 var predict = require("brain-predict") ;
 
 var config = {
+	// how many steps use to calculate meanerror
 	checkSteps : 16,
+	// how many steps to predict
 	predictionSteps : 8,
+	// how many steps use for eache pattern
 	step : 4,
+	// input data
 	serie : [
 		1198,2093,3274,1156,
 		1232,2112,3398,1285,
@@ -39,6 +45,8 @@ var prediction = predict.predict(config) ;
 console.log("PredictionSerie\n" + prediction.prediction + "\n");
 console.log("Mean error: " + prediction.meanerror) ;
 ```
+
+Result for 2 quarters
 
 ```
 PredictionSerie
