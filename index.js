@@ -19,7 +19,7 @@ module.exports.predict = function(config){
 	});
 
 	// max steps to check
-	var checkSteps = config.checkSteps ;
+	var checkSteps = config.serie.length - config.step ;
 	// max steps to predict
 	var predictionSteps = config.predictionSteps ;
 	// steps per pattern
@@ -48,6 +48,9 @@ module.exports.predict = function(config){
 		}
 		training.push(trainingObj) ;
 	}
+	if (training.length == 0){
+		return {} ;
+	}
 
 	var trainOutput = net.train(training, {
 	  errorThresh: 0.001,  // error threshold to reach
@@ -59,26 +62,26 @@ module.exports.predict = function(config){
 	if (config.debug) console.log(trainOutput) ;
 
 	var totError = 0 ;
-	var start = serie.length - checkSteps - 1 ;
 	var iter = 0 ;
-	for (var i=start;i<serie.length-step;i=i+1){
+	for (var i=0;i<serie.length-step-1;i=i+1){
 		iter++ ;
 		var input = [] ;
-		//var visualInput = [] ;
+		if (config.debug) var visualInput = [] ;
 		for (var ii=0;ii<step;ii++){
 			var value = serie[ii+i] / maxValue ;
 			input.push(value) ;
-			//visualInput.push(serie[ii+i]) ;
+			if (config.debug) visualInput.push(serie[ii+i]) ;
 		}
 		var expectedoutput = serie[i+step] ;
 		var output = net.run(input) ;
 		var prediction = output[0] * maxValue ;
 		var error = Math.abs((prediction - expectedoutput))/expectedoutput ;
+		if (expectedoutput === 0) error = 0 ;
 		totError += error ;
-		//console.log(visualInput) ;
-		//console.log("ExpectedOuput: " + expectedoutput) ;
-		//console.log("Prediction: " + prediction) ;
-		//console.log("Error: " + error + "\n") ;
+		if (config.debug) console.log(visualInput) ;
+		if (config.debug) console.log("ExpectedOuput: " + expectedoutput) ;
+		if (config.debug) console.log("Prediction: " + prediction) ;
+		if (config.debug) console.log("Error: " + error + "\n") ;
 	}
 
 
@@ -104,7 +107,8 @@ module.exports.predict = function(config){
 
 	return {
 		prediction: predictionSerie,
-		meanerror : totError/iter
+		meanerror : totError/iter,
+		trainOutput : trainOutput
 	}
 
 }

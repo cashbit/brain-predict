@@ -14,7 +14,6 @@
 var predict = require("../brain-predict") ;
 
 var config = {
-	checkSteps : 16,
 	predictionSteps : 8,
 	step : 4,
 	serie : [
