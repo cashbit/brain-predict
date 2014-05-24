@@ -61,9 +61,10 @@ module.exports.predict = function(config){
 	
 	if (config.debug) console.log(trainOutput) ;
 
+	var pastAndFuture = [] ;
 	var totError = 0 ;
 	var iter = 0 ;
-	for (var i=0;i<serie.length-step-1;i=i+1){
+	for (var i=0;i<serie.length-step;i=i+1){
 		iter++ ;
 		var input = [] ;
 		if (config.debug) var visualInput = [] ;
@@ -75,6 +76,7 @@ module.exports.predict = function(config){
 		var expectedoutput = serie[i+step] ;
 		var output = net.run(input) ;
 		var prediction = output[0] * maxValue ;
+		pastAndFuture.push(prediction) ;
 		var error = Math.abs((prediction - expectedoutput))/expectedoutput ;
 		if (expectedoutput === 0) error = 0 ;
 		totError += error ;
@@ -103,10 +105,12 @@ module.exports.predict = function(config){
 		//console.log("Prediction: " + prediction + "\n") ;
 		serie.push(prediction) ;
 		predictionSerie.push(prediction) ;
+		pastAndFuture.push(prediction) ;
 	}
 
 	return {
 		prediction: predictionSerie,
+		pastAndFuture : pastAndFuture,
 		meanerror : totError/iter,
 		trainOutput : trainOutput
 	}
