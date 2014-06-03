@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<script type="text/javascript" src="brain-0.6.3.js"></script>
+		<script type="text/javascript" src="index.js"></script>
+	</head>
+	<body onload="run()">
+		<script type="text/javascript">
+		function run(){
+			var config = {
+				predictionSteps : 8,
+				step : 4,
+				serie : [
+					1198,2093,3274,1156,
+					1232,2112,3398,1285,
+					1297,2220,3876,1456,
+					1434,2473,4213,1506,
+					1602,2504,4594,1638,
+					1746,2672,4852,1932,
+					1978,2916,4976,2031,
+					2012,2944,4947,2194,
+					2213,3253,5033,2328,
+					1981,3015,4811,2058,
+					2017,2970,4768,2081,
+					2093,3067,4879,2116
+				]  
+			}
+
+			var prediction = brain_predict.predict(config) ;
+
+			console.log("PredictionSerie\n" + prediction.prediction + "\n");
+			console.log("Mean error: " + prediction.meanerror) ;
+		}
+		</script>
+		View page source and console output...
+	</body>
+</html>

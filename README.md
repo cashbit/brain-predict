@@ -9,7 +9,7 @@ A Neural network prediction algorithm based on [brain](https://github.com/harthu
 npm install brain-predict
 ```
 
-### Example
+### Example for Node
 
 How to predict sales per year quarter.
 
@@ -52,3 +52,7 @@ PredictionSerie
 
 Mean error: 0.05270396240618591
 ```
+
+### Example for the browser
+
+See [index.html](index.html)
