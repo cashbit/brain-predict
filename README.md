@@ -56,3 +56,8 @@ Mean error: 0.05270396240618591
 ### Example for the browser
 
 See [index.html](index.html)
+
+
+### Experimental
+
+Introduced Offset traslation in this new version, in index_no_offset.js you can find older version with no offset traslation.
