@@ -1,6 +1,6 @@
 {
     "name": "brain-predict",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "A Neural network prediction algorithm based on brain node module",
     "dependencies": {
         "brain": "latest"

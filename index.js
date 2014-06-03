@@ -34,101 +34,152 @@ if(typeof exports == 'undefined'){
 
 
     	// max steps to check
-    	var checkSteps = config.serie.length - config.step ;
-    	// max steps to predict
-    	var predictionSteps = config.predictionSteps ;
-    	// steps per pattern
-    	var step = config.step ;
-    	// serie value
-    	var serie = config.serie ;
-
-    	var maxValue = 0 ;
-
-    	for (var i=0;i<serie.length;i++){
-    		if (maxValue < serie[i]) maxValue = serie[i] ;
-    	}
+        var checkSteps = config.serie.length - config.step ;
+        // max steps to predict
+        var predictionSteps = config.predictionSteps ;
+        // steps per pattern
+        var step = config.step ;
+        // serie value
+        var serie = config.serie ;
 
 
-    	var training = [] ;
-    	for (var i=0;i<serie.length-step;i=i+1){
-    		var input = [] ;
-    		for (var ii=0;ii<step;ii++){
-    			var value = serie[ii+i] / maxValue ;
-    			input.push(value) ;
-    		}
-    		
-    		var trainingObj = {
-    			input: input,
-    			output: [serie[i+step]/maxValue]
-    		}
-    		training.push(trainingObj) ;
-    	}
-    	if (training.length == 0){
-    		return {} ;
-    	}
+        // calc meanValue
+        var min = Infinity ;
+        for (var i=0;i<serie.length;i++){
+            if (serie[i] < min) min = serie[i] ;
+        }
+        // offset only if min < 0
+        //if (min > 0) min = 0;
+        for (var i=0;i<serie.length;i++){
+            serie[i] = serie[i] - min ;
+        }
 
-    	var trainOutput = net.train(training, {
-    	  errorThresh: 0.001,  // error threshold to reach
-    	  iterations: 20000,   // maximum training iterations
-    	  log: false,           // console.log() progress periodically
-    	  logPeriod: 10        // number of iterations between logging
-    	}) ;
-    	
-    	if (config.debug) console.log(trainOutput) ;
+        // normalize to 1
+        var maxValue = 0 ;
+        for (var i=0;i<serie.length;i++){
+            if (maxValue < serie[i]) maxValue = serie[i] ;
+        }
 
-    	var pastAndFuture = [] ;
-    	var totError = 0 ;
-    	var iter = 0 ;
-    	for (var i=0;i<serie.length-step;i=i+1){
-    		iter++ ;
-    		var input = [] ;
-    		if (config.debug) var visualInput = [] ;
-    		for (var ii=0;ii<step;ii++){
-    			var value = serie[ii+i] / maxValue ;
-    			input.push(value) ;
-    			if (config.debug) visualInput.push(serie[ii+i]) ;
-    		}
-    		var expectedoutput = serie[i+step] ;
-    		var output = net.run(input) ;
-    		var prediction = output[0] * maxValue ;
-    		pastAndFuture.push(prediction) ;
-    		var error = Math.abs((prediction - expectedoutput))/expectedoutput ;
-    		if (expectedoutput === 0) error = 0 ;
-    		totError += error ;
-    		if (config.debug) console.log(visualInput) ;
-    		if (config.debug) console.log("ExpectedOuput: " + expectedoutput) ;
-    		if (config.debug) console.log("Prediction: " + prediction) ;
-    		if (config.debug) console.log("Error: " + error + "\n") ;
-    	}
+        var training = [] ;
+        for (var i=0;i<serie.length-step;i=i+1){
+            var input = [] ;
+            for (var ii=0;ii<step;ii++){
+                var value = serie[ii+i] / maxValue ;
+                input.push(value) ;
+            }
+            
+            var trainingObj = {
+                input: input,
+                output: [serie[i+step]/maxValue]
+            }
+            training.push(trainingObj) ;
+        }
+        if (training.length == 0){
+            return {} ;
+        }
+
+        var trainOutput = net.train(training, {
+          errorThresh: 0.001,  // error threshold to reach
+          iterations: 40000,   // maximum training iterations
+          log: false,           // console.log() progress periodically
+          logPeriod: 10        // number of iterations between logging
+        }) ;
+        
+        if (config.debug) console.log(trainOutput) ;
+
+        var pastAndFuture = [] ;
+        var totError = 0 ;
+        var iter = 0 ;
+        for (var i=0;i<serie.length-step;i=i+1){
+            iter++ ;
+            var input = [] ;
+            if (config.debug) var visualInput = [] ;
+            for (var ii=0;ii<step;ii++){
+                var value = serie[ii+i] / maxValue ;
+                input.push(value) ;
+                if (config.debug) visualInput.push(serie[ii+i]) ;
+            }
+            var expectedoutput = serie[i+step] ;
+            var output = net.run(input) ;
+            var prediction = output[0] * maxValue ;
+            pastAndFuture.push(prediction) ;
+            var error = Math.abs((prediction - expectedoutput))/expectedoutput ;
+            if (expectedoutput === 0) error = 0 ;
+            totError += error ;
+            if (config.debug) console.log(visualInput) ;
+            if (config.debug) console.log("ExpectedOuput: " + expectedoutput) ;
+            if (config.debug) console.log("Prediction: " + prediction) ;
+            if (config.debug) console.log("Error: " + error + "\n") ;
+        }
+
+        var simulation = [] ;
+        for (var i=0;i<serie.length;i++){
+            simulation.push(serie[i]) ;
+        }
+        var totError = 0 ;
+        var iter = 0 ;
+        for (var i=0;i<simulation.length-step;i=i+1){
+            var input = [] ;
+            if (config.debug) var visualInput = [] ;
+            for (var ii=0;ii<step;ii++){
+                var value = simulation[ii+i] / maxValue ;
+                input.push(value) ;
+                if (config.debug) visualInput.push(simulation[ii+i]) ;
+            }
+            var output = net.run(input) ;
+            var prediction = output[0] * maxValue ;
+            simulation[i+step]=prediction ;
+            if (config.debug) console.log(visualInput) ;
+            if (config.debug) console.log("Prediction: " + prediction) ;
+            if (config.debug) console.log("Error: " + error + "\n") ;
+        }
 
 
 
-    	var start = serie.length - step ;
-    	var maxStep = serie.length + predictionSteps - step ;
-    	var predictionSerie = [] ;
-    	for (var i=start;i<maxStep;i=i+1){
-    		var input = [] ;
-    		//var visualInput = [] ;
-    		for (var ii=0;ii<step;ii++){
-    			var value = serie[ii+i] / maxValue ;
-    			input.push(value) ;
-    			//visualInput.push(serie[ii+i]) ;
-    		}
-    		var output = net.run(input) ;
-    		var prediction = output[0] * maxValue ;
-    		//console.log(visualInput) ;
-    		//console.log("Prediction: " + prediction + "\n") ;
-    		serie.push(prediction) ;
-    		predictionSerie.push(prediction) ;
-    		pastAndFuture.push(prediction) ;
-    	}
+        var start = serie.length - step ;
+        var maxStep = serie.length + predictionSteps - step ;
+        var predictionSerie = [] ;
+        for (var i=start;i<maxStep;i=i+1){
+            var input = [] ;
+            //var visualInput = [] ;
+            for (var ii=0;ii<step;ii++){
+                var value = serie[ii+i] / maxValue ;
+                input.push(value) ;
+                //visualInput.push(serie[ii+i]) ;
+            }
+            var output = net.run(input) ;
+            var prediction = output[0] * maxValue ;
+            //console.log(visualInput) ;
+            //console.log("Prediction: " + prediction + "\n") ;
+            serie.push(prediction) ;
+            predictionSerie.push(prediction) ;
+            pastAndFuture.push(prediction) ;
+        }
 
-    	return {
-    		prediction: predictionSerie,
-    		pastAndFuture : pastAndFuture,
-    		meanerror : totError/iter,
-    		trainOutput : trainOutput
-    	}
+        for (var i=0;i<serie.length;i++){
+            serie[i] = serie[i] + min ;
+        }
+
+        for (var i=0;i<prediction.length;i++){
+            prediction[i] = prediction[i] + min ;
+        }
+
+        for (var i=0;i<pastAndFuture.length;i++){
+            pastAndFuture[i] = pastAndFuture[i] + min ;
+        }
+
+        for (var i=0;i<simulation.length;i++){
+            simulation[i] = simulation[i] + min ;
+        }
+
+        return {
+            serie: serie,
+            prediction: predictionSerie,
+            simulation: simulation,
+            pastAndFuture : pastAndFuture,
+            meanerror : totError/iter,
+            trainOutput : trainOutput
+        }
 
     }
 
