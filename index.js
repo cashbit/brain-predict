@@ -42,6 +42,10 @@ if(typeof exports == 'undefined'){
         // serie value
         var serie = config.serie ;
 
+        if (step > serie.length){
+           step = serie.length - 1 ;
+        }
+
 
         // calc meanValue
         var min = Infinity ;
