@@ -121,7 +121,7 @@ if(typeof exports == 'undefined'){
         for (var i=0;i<serie.length;i++){
             simulation.push(serie[i]) ;
         }
-        var totError = 0 ;
+
         for (var i=0;i<simulation.length-step;i=i+1){
             var input = [] ;
             if (config.debug) var visualInput = [] ;
