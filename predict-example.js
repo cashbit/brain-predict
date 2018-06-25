@@ -11,7 +11,7 @@
 
 */
 
-var predict = require("../brain-predict") ;
+var predict = require("./index.js") ;
 
 var config = {
 	predictionSteps : 8,

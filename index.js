@@ -6,7 +6,8 @@
 	suggestions from: http://stats.stackexchange.com/questions/10162/how-to-apply-neural-network-to-time-series-forecasting
 	brain library from: https://github.com/harthur/brain
 
-	onther method: http://www.kadbox.it/Images/Articoli_PMI/PMI%200807%20-%20Strumenti%20di%20studio%20del%20portfolio%20prodotti%20-%20prevedere%20le%20vendite%20di%20un%20prodotto%20-%2045_53.pdf
+	another method:
+	 http://www.kadbox.it/Images/Articoli_PMI/PMI%200807%20-%20Strumenti%20di%20studio%20del%20portfolio%20prodotti%20-%20prevedere%20le%20vendite%20di%20un%20prodotto%20-%2045_53.pdf
 
 
 */
@@ -25,11 +26,18 @@ if(typeof exports == 'undefined'){
 	    	   learningRate: 0.01
 	    	});	
     	} else {
+            /*
     		var the_brain = require("brain");
 		   	var net = new the_brain.NeuralNetwork({
 		   	   //hiddenLayers: [4,3,2,1],
 		   	   learningRate: 0.01
 		   	});
+            */
+            var the_brain = require("brain.js");
+            var net = new the_brain.NeuralNetwork({
+               //hiddenLayers: [4,3,2,1],
+               learningRate: 0.01
+            });
     	}
 
 
@@ -120,8 +128,7 @@ if(typeof exports == 'undefined'){
         for (var i=0;i<serie.length;i++){
             simulation.push(serie[i]) ;
         }
-        var totError = 0 ;
-        var iter = 0 ;
+
         for (var i=0;i<simulation.length-step;i=i+1){
             var input = [] ;
             if (config.debug) var visualInput = [] ;

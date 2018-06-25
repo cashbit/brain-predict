@@ -3,7 +3,7 @@
     "version": "0.0.8",
     "description": "A Neural network prediction algorithm based on brain node module",
     "dependencies": {
-        "brain": "latest"
+        "brain.js": "latest"
     },
     "repository": "https://github.com/cashbit/brain-predict.git",
     "author": "Cashbit"
